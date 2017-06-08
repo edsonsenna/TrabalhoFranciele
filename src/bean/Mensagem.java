@@ -18,17 +18,8 @@ public class Mensagem {
     private int remetente;
     private int code;
     private Date data;
-
-    public Date getData() {
-        return data;
-    }
-
-    public void setData(Date data) {
-        this.data = data;
-    }
-
+    private Boolean status;
     
-
     public Mensagem(String conteudo, int destinario, int remetente) {
         this.conteudo = conteudo;
         this.destinario = destinario;
@@ -36,6 +27,22 @@ public class Mensagem {
     }
     public Mensagem(){
     
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
     }
 
     public String getConteudo() {

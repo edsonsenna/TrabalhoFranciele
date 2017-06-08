@@ -19,30 +19,83 @@ import javax.swing.JOptionPane;
  */
 public class MensagemDAO {  
     public ArrayList consultar(int codUsuario){
-    PreparedStatement sql; 
-    ArrayList<Mensagem> mensagens = new ArrayList();
-    try{
-        //String teste = "SELECT * FROM mensagem WHERE mensagem.idDestinatario=usuario.idUsuario AND usuario.loginUsuario="+user+";";
-        //System.out.println(teste);
-        sql=(PreparedStatement) BancoDados.getInstance().prepareStatement
-        ("SELECT * FROM mensagem,usuario WHERE mensagem.idDestinatario=usuario.idUsuario AND usuario.idUsuario="+codUsuario);
-        System.out.println(codUsuario);
-        ResultSet rs = sql.executeQuery();
-        while(rs.next()){
-            Mensagem mensagem = new Mensagem();
-            mensagem.setCode(rs.getInt("idMensagem"));
-            mensagem.setConteudo(rs.getString("conteudoMensagem"));
-            mensagem.setDestinario(rs.getInt("idDestinatario"));
-            mensagem.setRemetente(rs.getInt("idRemetente"));
-            mensagem.setData(rs.getDate("dataMensagem"));
-            mensagens.add(mensagem);
-        }// fim do while
+        PreparedStatement sql; 
+        ArrayList<Mensagem> mensagens = new ArrayList();
+        try{
+            sql=(PreparedStatement) BancoDados.getInstance().prepareStatement
+            ("SELECT * FROM mensagem,usuario WHERE mensagem.idDestinatario=usuario.idUsuario AND usuario.idUsuario="+codUsuario);
+            System.out.println(codUsuario);
+            ResultSet rs = sql.executeQuery();
+            while(rs.next()){
+                Mensagem mensagem = new Mensagem();
+                mensagem.setCode(rs.getInt("idMensagem"));
+                mensagem.setConteudo(rs.getString("conteudoMensagem"));
+                mensagem.setDestinario(rs.getInt("idDestinatario"));
+                mensagem.setRemetente(rs.getInt("idRemetente"));
+                mensagem.setData(rs.getDate("dataMensagem"));
+                mensagem.setStatus(rs.getBoolean("status"));
+                mensagens.add(mensagem);
+            }// fim do while
 
-    }// fim do try
-    catch(SQLException ex) {
-      System.out.println(ex);
+        }// fim do try
+        catch(SQLException ex) {
+          System.out.println(ex);
+        }
+        return mensagens;
     }
-    return mensagens;
+    
+    public ArrayList consultarPropriasMsgs(int codUsuario){
+        PreparedStatement sql; 
+        ArrayList<Mensagem> mensagens = new ArrayList();
+        try{
+            sql=(PreparedStatement) BancoDados.getInstance().prepareStatement
+            ("SELECT * FROM mensagem,usuario WHERE mensagem.idRemetente=usuario.idUsuario AND usuario.idUsuario="+codUsuario);
+            System.out.println(codUsuario);
+            ResultSet rs = sql.executeQuery();
+            while(rs.next()){
+                Mensagem mensagem = new Mensagem();
+                mensagem.setCode(rs.getInt("idMensagem"));
+                mensagem.setConteudo(rs.getString("conteudoMensagem"));
+                mensagem.setDestinario(rs.getInt("idDestinatario"));
+                mensagem.setRemetente(rs.getInt("idRemetente"));
+                mensagem.setData(rs.getDate("dataMensagem"));
+                mensagem.setStatus(rs.getBoolean("status"));
+                mensagens.add(mensagem);
+            }// fim do while
+
+        }// fim do try
+        catch(SQLException ex) {
+          System.out.println(ex);
+        }
+        return mensagens;
+    }
+    
+    public void alterarStatusMensagem(int idMensagem){
+        PreparedStatement sql;
+        try{
+            sql=(PreparedStatement) BancoDados.getInstance().prepareStatement
+            ("UPDATE mensagem SET status = 1 WHERE mensagem.idMensagem =" + idMensagem);
+            sql.executeUpdate();
+        }
+        catch(SQLException ex){
+            System.err.println(ex);
+        }
+    }
+
+    public void enviarMensagem(int idRem, int idDest, String mensagem){
+        PreparedStatement sql; 
+        ArrayList<Mensagem> mensagens = new ArrayList();
+        try{
+            sql=(PreparedStatement) BancoDados.getInstance().prepareStatement
+            ("INSERT INTO mensagem VALUES (null, ?, ?, ?, now(), 0);");
+            sql.setString(1, mensagem);
+            sql.setInt(2, idDest);
+            sql.setInt(3, idRem);
+            sql.execute();
+        }// fim do try
+        catch(SQLException ex) {
+          System.out.println(ex);
+        }
     }
    }
 

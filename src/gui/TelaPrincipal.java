@@ -7,6 +7,7 @@ package gui;
 
 import bean.Mensagem;
 import dao.MensagemDAO;
+import dao.UsuarioDAO;
 import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
@@ -17,6 +18,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class TelaPrincipal extends javax.swing.JFrame {
     private int codUsuario;
+    private ArrayList<Mensagem> mensagensRec;
+    private ArrayList<Mensagem> mensagensEnv;
     /**
      * Creates new form TelaAcoes
      */
@@ -24,25 +27,57 @@ public class TelaPrincipal extends javax.swing.JFrame {
         initComponents();
         this.codUsuario = codUsuario; 
         this.lista();
-        
-        
     }
 
     private TelaPrincipal() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public void lista(){
-        ArrayList<Mensagem> mensagens = new ArrayList();
+        this.mensagensRec = new ArrayList();
         MensagemDAO mensagemDAO =  new MensagemDAO();
-        mensagens = mensagemDAO.consultar(this.codUsuario);
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        this.mensagensRec = mensagemDAO.consultar(this.codUsuario);
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel modelo2 = (DefaultTableModel) jTable2.getModel();
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 4; j++){
+                try{
+                   modelo.setValueAt(null, i, j); 
+                }
+                catch(ArrayIndexOutOfBoundsException e){
+                    System.out.println(e);
+                }
+            }
+            for(int j = 0; j < 3; j++){
+                try{
+                   modelo2.setValueAt(null, i, j);
+                }
+                catch(ArrayIndexOutOfBoundsException e){
+                    System.out.println(e);
+                }
+            }
+        }
+        
         modelo.setNumRows(0);
-        Vector linha = new Vector();  
-        for (Mensagem mensagem : mensagens) {
-            linha.add(mensagem.getRemetente());
+        for (Mensagem mensagem : this.mensagensRec) {
+            Vector linha = new Vector();
+            linha.add(usuarioDAO.consultar(mensagem.getRemetente()));
             linha.add(mensagem.getData());
             linha.add(mensagem.getConteudo());
+            linha.add(mensagem.getStatus() ? "Lida" : "Não lida");
             modelo.addRow(linha);
+        }
+        
+        this.mensagensEnv = new ArrayList();
+        this.mensagensEnv = mensagemDAO.consultarPropriasMsgs(this.codUsuario);
+        modelo2.setNumRows(0);
+        for (Mensagem mensagem : this.mensagensEnv) {
+            Vector linha = new Vector();
+            linha.add(usuarioDAO.consultar(mensagem.getDestinario()));
+            linha.add(mensagem.getData());
+            linha.add(mensagem.getConteudo());
+            linha.add(mensagem.getStatus() ? "Lida" : "Não lida");
+            modelo2.addRow(linha);
         }
     }
 
@@ -71,26 +106,26 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Remetente", "Data", "Mensagem"
+                "Remetente", "Data", "Mensagem", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -99,6 +134,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTable1);
@@ -110,6 +150,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
 
         buttonAtt.setText("Atualizar");
+        buttonAtt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAttActionPerformed(evt);
+            }
+        });
 
         buttonMsg.setText("Escrever Mensagem");
         buttonMsg.addActionListener(new java.awt.event.ActionListener() {
@@ -135,6 +180,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 "Destinatário", "Data", "Mensagem"
             }
         ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         jLabel2.setText("Recebidas");
@@ -189,7 +239,43 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void buttonMsgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMsgActionPerformed
         // TODO add your handling code here:
+        TelaEnviarMensagem p = new TelaEnviarMensagem(codUsuario);
+        p.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_buttonMsgActionPerformed
+
+    private void buttonAttActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAttActionPerformed
+        // TODO add your handling code here:
+        lista();
+    }//GEN-LAST:event_buttonAttActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        Vector linha = new Vector();
+        MensagemDAO mensagemDAO = new MensagemDAO();
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        int linhaSelec = jTable1.getSelectedRow();
+        linha = (Vector) modelo.getDataVector().elementAt(linhaSelec);
+        String dest = linha.get(0).toString();
+        String txt = linha.get(2).toString();
+        if(linha.get(3).toString().equals("Não lida"))  
+            mensagemDAO.alterarStatusMensagem(mensagensRec.get(linhaSelec).getCode());
+        TelaExibeMensagem p = new TelaExibeMensagem(this.codUsuario, txt, dest);
+        p.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        Vector linha = new Vector();
+        DefaultTableModel modelo = (DefaultTableModel) jTable2.getModel();
+        int linhaSelec = jTable2.getSelectedRow();
+        linha = (Vector) modelo.getDataVector().elementAt(linhaSelec);
+        String dest = linha.get(0).toString();
+        String txt = linha.get(2).toString();
+        TelaExibeMensagem p = new TelaExibeMensagem(this.codUsuario, txt, dest);
+        p.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jTable2MouseClicked
 
     /**
      * @param args the command line arguments

@@ -138,10 +138,7 @@ public class TelaLogin extends javax.swing.JFrame {
         }
         else{
             txtAviso.setText("Login ou senha incorreta");
-            
         }
-        
-        
     }//GEN-LAST:event_botaoLoginActionPerformed
 
     /**
