@@ -11,20 +11,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author USER
  */
 public class MensagemDAO {  
-    public ArrayList consultar(int idUsuario){
+    public ArrayList consultar(int codUsuario){
     PreparedStatement sql; 
     ArrayList<Mensagem> mensagens = new ArrayList();
     try{
+        //String teste = "SELECT * FROM mensagem WHERE mensagem.idDestinatario=usuario.idUsuario AND usuario.loginUsuario="+user+";";
+        //System.out.println(teste);
         sql=(PreparedStatement) BancoDados.getInstance().prepareStatement
-        ("SELECT * FROM mensagem, usuario WHERE mensagem.idDestinatario=usuario.idUsuario AND usuario.idUsuario="+idUsuario);
+        ("SELECT * FROM mensagem,usuario WHERE mensagem.idDestinatario=usuario.idUsuario AND usuario.idUsuario="+codUsuario);
+        System.out.println(codUsuario);
         ResultSet rs = sql.executeQuery();
-
         while(rs.next()){
             Mensagem mensagem = new Mensagem();
             mensagem.setCode(rs.getInt("idMensagem"));

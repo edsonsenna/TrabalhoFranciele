@@ -5,6 +5,8 @@
  */
 package bean;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author USER
@@ -14,6 +16,7 @@ public class Usuario {
     private String login;
     private String senha;
     private int code;
+    private ArrayList<Mensagem> mensagens;
 
     public Usuario(String nome, String login, String senha, int code) {
         this.nome = nome;
@@ -56,6 +59,14 @@ public class Usuario {
 
     public void setCode(int code) {
         this.code = code;
+    }
+
+    public ArrayList<Mensagem> getMensagens() {
+        return mensagens;
+    }
+
+    public void setMensagens(ArrayList<Mensagem> mensagens) {
+        this.mensagens = mensagens;
     }
 
     

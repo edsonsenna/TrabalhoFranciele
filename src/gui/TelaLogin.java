@@ -128,11 +128,11 @@ public class TelaLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         ArrayList<Usuario> usuarios = new ArrayList();
-        usuarios = usuarioDAO.consultar();
-        if(login(txtLogin.getText(), new String(txtSenha.getPassword()), usuarios)){
-            System.out.println("Logado com sucesso");
+        usuarios = usuarioDAO.consultar(txtLogin.getText());
+        int codUsuario=0;
+        if(login(txtLogin.getText(), new String(txtSenha.getPassword()), usuarios)){          
+            TelaPrincipal p = new TelaPrincipal(usuarios.get(0).getCode());
             this.dispose();
-            TelaPrincipal p = new TelaPrincipal();
             p.setTitle("Tela Principal");
             p.setVisible(true);
         }

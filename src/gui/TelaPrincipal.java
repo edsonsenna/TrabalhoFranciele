@@ -16,28 +16,33 @@ import javax.swing.table.DefaultTableModel;
  * @author 13151000162
  */
 public class TelaPrincipal extends javax.swing.JFrame {
-
+    private int codUsuario;
     /**
      * Creates new form TelaAcoes
      */
-    public TelaPrincipal() {
+    public TelaPrincipal(int codUsuario) {
         initComponents();
+        this.codUsuario = codUsuario; 
         this.lista();
         
+        
+    }
+
+    private TelaPrincipal() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public void lista(){
-        Mensagem mensagem = new Mensagem();
         ArrayList<Mensagem> mensagens = new ArrayList();
         MensagemDAO mensagemDAO =  new MensagemDAO();
-        mensagens = mensagemDAO.consultar();
+        mensagens = mensagemDAO.consultar(this.codUsuario);
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
         modelo.setNumRows(0);
         Vector linha = new Vector();  
-        for (Pessoa pessoa : pessoas) {                   
-            linha.add(pessoa.getNome());
-            linha.add(pessoa.getCpf());
-            linha.add(pessoa.getEnd());
-            linha.add(pessoa.getEmail());
+        for (Mensagem mensagem : mensagens) {                   
+            linha.add(mensagem.getCode());
+            linha.add(mensagem.getDestinario());
+            linha.add(mensagem.getRemetente());
+            linha.add(mensagem.getConteudo());
             modelo.addRow(linha);
         }
     }
@@ -75,14 +80,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Remetente", "Data", "Mensagem", "Status"
+                "Código", "Destinatário", "Remetente", "Conteúdo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, true
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

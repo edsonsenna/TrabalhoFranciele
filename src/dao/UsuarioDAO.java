@@ -17,14 +17,13 @@ import java.util.ArrayList;
  * @author USER
  */
 public class UsuarioDAO {  
-    public ArrayList consultar(){
+    public ArrayList consultar(String user){
     PreparedStatement sql; 
     ArrayList<Usuario> usuarios = new ArrayList();
     try{
         sql=(PreparedStatement) BancoDados.getInstance().prepareStatement
-        ("SELECT * FROM usuario");
+        ("SELECT * FROM usuario WHERE usuario.loginUsuario like '%"+user+"%';");
         ResultSet rs = sql.executeQuery();
-
         while(rs.next()){
             Usuario usuario = new Usuario();
             usuario.setCode(rs.getInt("idUsuario"));

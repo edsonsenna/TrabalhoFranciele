@@ -8,7 +8,7 @@ public class BancoDados {
 	// atributos
     private static Connection BancoDados = null;
     //esta eh a variavel fonte recebe o mesmo nome da base de dados criada no post gre sql
-    private String fonte = "mydb";   
+    private String fonte = "mensagem";   
 	
 	
     //Conexao Para a Base de Dados do PostgresSQL utilizando JDBC
