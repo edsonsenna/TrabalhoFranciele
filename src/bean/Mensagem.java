@@ -5,7 +5,7 @@
  */
 package bean;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.GregorianCalendar;
 
 /**
@@ -17,7 +17,7 @@ public class Mensagem {
     private int destinario;
     private int remetente;
     private int code;
-    private Date data;
+    private Timestamp data;
     private Boolean status;
     
     public Mensagem(String conteudo, int destinario, int remetente) {
@@ -37,11 +37,11 @@ public class Mensagem {
         this.status = status;
     }
 
-    public Date getData() {
+    public Timestamp getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(Timestamp data) {
         this.data = data;
     }
 

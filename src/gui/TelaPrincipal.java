@@ -260,7 +260,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         String txt = linha.get(2).toString();
         if(linha.get(3).toString().equals("Não lida"))  
             mensagemDAO.alterarStatusMensagem(mensagensRec.get(linhaSelec).getCode());
-        TelaExibeMensagem p = new TelaExibeMensagem(this.codUsuario, txt, dest);
+        TelaExibeMensagem p = new TelaExibeMensagem(this.codUsuario, txt, "por " + dest);
         p.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jTable1MouseClicked
@@ -272,7 +272,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         linha = (Vector) modelo.getDataVector().elementAt(linhaSelec);
         String dest = linha.get(0).toString();
         String txt = linha.get(2).toString();
-        TelaExibeMensagem p = new TelaExibeMensagem(this.codUsuario, txt, dest);
+        TelaExibeMensagem p = new TelaExibeMensagem(this.codUsuario, txt, "para " + dest);
         p.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jTable2MouseClicked

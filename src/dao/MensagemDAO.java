@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -32,7 +31,7 @@ public class MensagemDAO {
                 mensagem.setConteudo(rs.getString("conteudoMensagem"));
                 mensagem.setDestinario(rs.getInt("idDestinatario"));
                 mensagem.setRemetente(rs.getInt("idRemetente"));
-                mensagem.setData(rs.getDate("dataMensagem"));
+                mensagem.setData(rs.getTimestamp("dataMensagem"));
                 mensagem.setStatus(rs.getBoolean("status"));
                 mensagens.add(mensagem);
             }// fim do while
@@ -58,7 +57,7 @@ public class MensagemDAO {
                 mensagem.setConteudo(rs.getString("conteudoMensagem"));
                 mensagem.setDestinario(rs.getInt("idDestinatario"));
                 mensagem.setRemetente(rs.getInt("idRemetente"));
-                mensagem.setData(rs.getDate("dataMensagem"));
+                mensagem.setData(rs.getTimestamp("dataMensagem"));
                 mensagem.setStatus(rs.getBoolean("status"));
                 mensagens.add(mensagem);
             }// fim do while
