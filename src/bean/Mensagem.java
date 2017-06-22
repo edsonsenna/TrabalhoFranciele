@@ -6,6 +6,7 @@
 package bean;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 /**
@@ -14,13 +15,13 @@ import java.util.GregorianCalendar;
  */
 public class Mensagem {
     private String conteudo;
-    private int destinario;
-    private int remetente;
+    private Usuario destinario;
+    private Usuario remetente;
     private int code;
-    private Timestamp data;
+    private GregorianCalendar data;
     private Boolean status;
     
-    public Mensagem(String conteudo, int destinario, int remetente) {
+    public Mensagem(String conteudo, Usuario destinario, Usuario remetente) {
         this.conteudo = conteudo;
         this.destinario = destinario;
         this.remetente = remetente;
@@ -37,11 +38,11 @@ public class Mensagem {
         this.status = status;
     }
 
-    public Timestamp getData() {
+    public GregorianCalendar getData() {
         return data;
     }
 
-    public void setData(Timestamp data) {
+    public void setData(GregorianCalendar data) {
         this.data = data;
     }
 
@@ -53,19 +54,19 @@ public class Mensagem {
         this.conteudo = conteudo;
     }
 
-    public int getDestinario() {
+    public Usuario getDestinario() {
         return destinario;
     }
 
-    public void setDestinario(int destinario) {
+    public void setDestinario(Usuario destinario) {
         this.destinario = destinario;
     }
 
-    public int getRemetente() {
+    public Usuario getRemetente() {
         return remetente;
     }
 
-    public void setRemetente(int remetente) {
+    public void setRemetente(Usuario remetente) {
         this.remetente = remetente;
     }
     

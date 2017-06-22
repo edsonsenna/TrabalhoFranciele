@@ -9,6 +9,7 @@ import bean.Mensagem;
 import dao.MensagemDAO;
 import dao.UsuarioDAO;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
@@ -61,8 +62,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
         modelo.setNumRows(0);
         for (Mensagem mensagem : this.mensagensRec) {
             Vector linha = new Vector();
-            linha.add(usuarioDAO.consultar(mensagem.getRemetente()));
-            linha.add(mensagem.getData());
+            String dataString;
+            linha.add(mensagem.getRemetente().getNome());
+            dataString = mensagem.getData().get(Calendar.DAY_OF_MONTH) + "/" +
+                    (mensagem.getData().get(Calendar.MONTH)+1) + "/" +
+                    mensagem.getData().get(Calendar.YEAR) + " " + 
+                    mensagem.getData().get(Calendar.HOUR) + ":" +
+                    mensagem.getData().get(Calendar.MINUTE) + ":" +
+                    mensagem.getData().get(Calendar.SECOND);
+            linha.add(dataString);
             linha.add(mensagem.getConteudo());
             linha.add(mensagem.getStatus() ? "Lida" : "Não lida");
             modelo.addRow(linha);
@@ -73,8 +81,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
         modelo2.setNumRows(0);
         for (Mensagem mensagem : this.mensagensEnv) {
             Vector linha = new Vector();
-            linha.add(usuarioDAO.consultar(mensagem.getDestinario()));
-            linha.add(mensagem.getData());
+            String dataString;
+            linha.add(mensagem.getDestinario().getNome());
+            dataString = mensagem.getData().get(Calendar.DAY_OF_MONTH) + "/" +
+                    (mensagem.getData().get(Calendar.MONTH)+1) + "/" +
+                    mensagem.getData().get(Calendar.YEAR) + " " + 
+                    mensagem.getData().get(Calendar.HOUR) + ":" +
+                    mensagem.getData().get(Calendar.MINUTE) + ":" +
+                    mensagem.getData().get(Calendar.SECOND);
+            linha.add(dataString);
             linha.add(mensagem.getConteudo());
             linha.add(mensagem.getStatus() ? "Lida" : "Não lida");
             modelo2.addRow(linha);
